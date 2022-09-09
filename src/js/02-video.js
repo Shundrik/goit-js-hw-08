@@ -19,7 +19,7 @@ function saveTime(e) {
   localStorage.setItem(STORAGE_VIDEO_KEY, currentTime);
 }
 
-currentTime = localStorage.getItem(STORAGE_VIDEO_KEY);
+let currentTime = localStorage.getItem(STORAGE_VIDEO_KEY);
 console.log(currentTime);
 player
   .setCurrentTime(currentTime)
