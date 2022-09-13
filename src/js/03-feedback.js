@@ -1,17 +1,18 @@
-import throttle from "lodash.throttle";
+import throttle from 'lodash.throttle';
 
-const STORAGE_KEY = "feedback-form-state";
-const formData = {};
+const STORAGE_KEY = 'feedback-form-state';
+let formData = {};
 
 const refs = {
-  form: document.querySelector(".feedback-form"),
-  input: document.querySelector("input"),
-  textarea: document.querySelector("textarea"),
+  form: document.querySelector('.feedback-form'),
+  input: document.querySelector('input'),
+  textarea: document.querySelector('textarea'),
 };
 
-refs.form.addEventListener("submit", onFormSubmit);
-refs.form.addEventListener("input", throttle(onFormInput, 500));
-// refs.textarea.addEventListener("input", onTextareaInput);
+refs.form.addEventListener('submit', onFormSubmit);
+refs.form.addEventListener('input', throttle(onFormInput, 500));
+
+applyForm();
 
 function onFormInput(e) {
   formData[e.target.name] = e.target.value;
@@ -22,26 +23,20 @@ function onFormInput(e) {
 function onFormSubmit(e) {
   e.preventDefault();
 
-  e.currentTarget.reset();
-  localStorage.removeItem(STORAGE_KEY);
   console.log(formData);
+  localStorage.removeItem(STORAGE_KEY);
+  e.currentTarget.reset();
 }
 
-applyForm();
-
 function applyForm() {
-  const saveForm = localStorage.getItem(STORAGE_KEY);
-  //   console.log("проверка хранилища:",saveForm);
+  let saveForm = localStorage.getItem(STORAGE_KEY);
+  // console.log('проверка хранилища:', saveForm);
 
   if (saveForm) {
-    try {
-      const formJsonParse = JSON.parse(saveForm);
-      const emailData = !formJsonParse.email ? "" : formJsonParse.email;
-      const messegeData = !formJsonParse.message ? "" : formJsonParse.message;
-      refs.input.value = emailData;
-      refs.textarea.value = messegeData;
-    } catch (error) {
-      console.log("parsing error");
-    }
+    saveForm = JSON.parse(saveForm);
+    Object.entries(saveForm).forEach(([name, value]) => {
+      formData[name] = value;
+      refs.form.elements[name].value = value;
+    });
   }
 }
