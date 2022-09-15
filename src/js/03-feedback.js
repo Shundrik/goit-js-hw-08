@@ -22,30 +22,21 @@ function onFormInput(e) {
 
 function onFormSubmit(e) {
   e.preventDefault();
-
   console.log(formData);
   localStorage.removeItem(STORAGE_KEY);
   e.currentTarget.reset();
-
+  formData = {};
 }
 
 function applyForm() {
   let saveForm = localStorage.getItem(STORAGE_KEY);
-  console.log('проверка хранилища:', saveForm);
+  // console.log('проверка хранилища:', saveForm);
 
   if (saveForm) {
     saveForm = JSON.parse(saveForm);
-    console.log(saveForm);
-console.log( Object.entries(saveForm));
-
     Object.entries(saveForm).forEach(([name, value]) => {
-    
       formData[name] = value;
-console.log(formData);
-console.log(formData[name] = value);
-
       refs.form.elements[name].value = value;
-      console.log(refs.form.elements[name].value = value);
     });
   }
 }
